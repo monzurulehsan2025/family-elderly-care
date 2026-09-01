@@ -194,6 +194,28 @@ async function runTests() {
     }
   });
 
+  // 10. Query Filtering: GET /api/v1/caregivers with status and search query params
+  await assert('GET /api/v1/caregivers?status=Active&search=Rodriguez returns filtered matches', async () => {
+    const res = await makeRequest('GET', '/api/v1/caregivers?status=Active&search=Rodriguez');
+    if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
+    if (!res.data.success || !Array.isArray(res.data.data)) throw new Error('Expected array of matching caregivers');
+    if (res.data.data.length === 0) throw new Error('Expected at least 1 match for Rodriguez');
+    const matched = res.data.data[0];
+    if (!matched.fullName.includes('Rodriguez') || matched.status !== 'Active') {
+      throw new Error('Filtering criteria not satisfied in query response');
+    }
+  });
+
+  // 11. Resource Not Found: GET /api/v1/caregivers/non-existent-id returns 404
+  await assert('GET /api/v1/caregivers/:invalidId returns 404 Not Found', async () => {
+    const res = await makeRequest('GET', '/api/v1/caregivers/cg-99999');
+    if (res.status !== 404) throw new Error(`Expected status 404, got ${res.status}`);
+    if (res.data.success !== false) throw new Error('Expected success: false in 404 response');
+    if (!res.data.error || !res.data.error.includes('not found')) {
+      throw new Error(`Expected error message mentioning 'not found', got: ${res.data.error}`);
+    }
+  });
+
   console.log('\n========================================');
   console.log(` Summary: ${passed} passed, ${failed} failed`);
   console.log('========================================\n');
