@@ -165,6 +165,35 @@ async function runTests() {
     if (!res.data.data.id.startsWith('ref-')) throw new Error('Expected generated referral id');
   });
 
+  // 8. Stats Overview: GET /api/v1/stats/overview
+  await assert('GET /api/v1/stats/overview returns aggregate partner dashboard KPIs (200 OK)', async () => {
+    const res = await makeRequest('GET', '/api/v1/stats/overview');
+    if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
+    if (!res.data.success || !res.data.data) throw new Error('Expected success true with stats payload');
+    const { totalCaregivers, totalRecipients, avgWellnessScore, pendingReferrals, totalCareLogs } = res.data.data;
+    if (typeof totalCaregivers !== 'number' || totalCaregivers <= 0) throw new Error('Invalid totalCaregivers in stats');
+    if (typeof totalRecipients !== 'number' || totalRecipients <= 0) throw new Error('Invalid totalRecipients in stats');
+    if (typeof avgWellnessScore !== 'number' || avgWellnessScore < 0 || avgWellnessScore > 100) throw new Error('Invalid avgWellnessScore');
+    if (typeof pendingReferrals !== 'number') throw new Error('Invalid pendingReferrals in stats');
+    if (typeof totalCareLogs !== 'number' || totalCareLogs <= 0) throw new Error('Invalid totalCareLogs in stats');
+  });
+
+  // 9. Error Handling & Validation: POST /api/v1/care-logs with missing required fields
+  await assert('POST /api/v1/care-logs rejects malformed payload with 400 Bad Request', async () => {
+    const invalidPayload = {
+      // Intentionally missing caregiverId, careRecipientId, and adlsCompleted
+      shiftType: "Morning",
+      recipientMood: "Calm & Cooperative"
+    };
+
+    const res = await makeRequest('POST', '/api/v1/care-logs', invalidPayload);
+    if (res.status !== 400) throw new Error(`Expected status 400 Bad Request, got ${res.status}`);
+    if (res.data.success !== false) throw new Error('Expected success: false in validation error response');
+    if (!res.data.error || !res.data.error.includes('Missing required fields')) {
+      throw new Error(`Expected descriptive error message, got: ${res.data.error}`);
+    }
+  });
+
   console.log('\n========================================');
   console.log(` Summary: ${passed} passed, ${failed} failed`);
   console.log('========================================\n');
