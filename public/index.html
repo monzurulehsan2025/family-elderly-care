@@ -121,6 +121,49 @@
           <span>API Base:</span>
           <code>/api/v1</code>
         </div>
+
+        <!-- Dashboard Background Color Selector -->
+        <div class="theme-selector-wrap">
+          <button class="btn btn-secondary theme-toggle-btn" id="btn-theme-selector" onclick="toggleThemeDropdown(event)" title="Change Dashboard Background Color">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a7 7 0 1 0 7 7"/>
+            </svg>
+            <span>Background</span>
+            <span class="theme-swatch-preview" id="current-theme-swatch"></span>
+          </button>
+
+          <div class="theme-dropdown-menu" id="theme-dropdown-menu">
+            <div class="theme-dropdown-header">Dashboard Background Color</div>
+            <div class="theme-options-grid">
+              <button type="button" class="theme-opt-btn active" data-theme="midnight" onclick="selectTheme('midnight', '#090d16', '#0f172a', 'Midnight Slate')">
+                <span class="theme-color-dot" style="background: #090d16; border: 1px solid #38bdf8;"></span>
+                <span>Midnight Slate</span>
+              </button>
+              <button type="button" class="theme-opt-btn" data-theme="ocean" onclick="selectTheme('ocean', '#071326', '#0d1f3d', 'Ocean Navy')">
+                <span class="theme-color-dot" style="background: #071326; border: 1px solid #60a5fa;"></span>
+                <span>Ocean Navy</span>
+              </button>
+              <button type="button" class="theme-opt-btn" data-theme="emerald" onclick="selectTheme('emerald', '#051b14', '#0a2d22', 'Forest Emerald')">
+                <span class="theme-color-dot" style="background: #051b14; border: 1px solid #34d399;"></span>
+                <span>Forest Emerald</span>
+              </button>
+              <button type="button" class="theme-opt-btn" data-theme="indigo" onclick="selectTheme('indigo', '#0f0c24', '#1b173d', 'Royal Twilight')">
+                <span class="theme-color-dot" style="background: #0f0c24; border: 1px solid #a78bfa;"></span>
+                <span>Royal Twilight</span>
+              </button>
+              <button type="button" class="theme-opt-btn" data-theme="charcoal" onclick="selectTheme('charcoal', '#12161f', '#1c222e', 'Stealth Charcoal')">
+                <span class="theme-color-dot" style="background: #12161f; border: 1px solid #94a3b8;"></span>
+                <span>Stealth Charcoal</span>
+              </button>
+            </div>
+            <div class="theme-custom-picker">
+              <label for="custom-bg-input">Custom Color:</label>
+              <input type="color" id="custom-bg-input" value="#090d16" oninput="applyCustomColor(this.value)">
+            </div>
+          </div>
+        </div>
+
         <button class="btn btn-primary" id="btn-quick-log" onclick="openModal('modal-create-log')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>

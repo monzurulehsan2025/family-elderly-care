@@ -27,6 +27,7 @@ const VIEW_TITLES = {
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', async () => {
+  initTheme();
   initNavigation();
   initSearchAndFilters();
   if (window.initApiExplorer) {
@@ -708,8 +709,103 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-function syncCaregiverRecipient() {
-  // Sync logic if needed
+// Theme & Dashboard Background Switcher
+const THEME_PRESETS = {
+  midnight: { bg: '#090d16', sidebar: '#0f172a', name: 'Midnight Slate' },
+  ocean: { bg: '#071326', sidebar: '#0d1f3d', name: 'Ocean Navy' },
+  emerald: { bg: '#051b14', sidebar: '#0a2d22', name: 'Forest Emerald' },
+  indigo: { bg: '#0f0c24', sidebar: '#1b173d', name: 'Royal Twilight' },
+  charcoal: { bg: '#12161f', sidebar: '#1c222e', name: 'Stealth Charcoal' }
+};
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('carenexus_theme') || 'midnight';
+  const customColor = localStorage.getItem('carenexus_custom_bg');
+
+  if (customColor) {
+    applyCustomColor(customColor, false);
+  } else if (THEME_PRESETS[savedTheme]) {
+    const t = THEME_PRESETS[savedTheme];
+    selectTheme(savedTheme, t.bg, t.sidebar, t.name, false);
+  }
+
+  // Click outside listener to close theme dropdown
+  document.addEventListener('click', (e) => {
+    const wrap = document.querySelector('.theme-selector-wrap');
+    const menu = document.getElementById('theme-dropdown-menu');
+    if (wrap && menu && !wrap.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+}
+
+function toggleThemeDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('theme-dropdown-menu');
+  if (menu) {
+    menu.classList.toggle('open');
+  }
+}
+
+function selectTheme(themeId, bgColor, sidebarColor, label, showNotice = true) {
+  document.documentElement.style.setProperty('--bg-app', bgColor);
+  if (sidebarColor) {
+    document.documentElement.style.setProperty('--bg-sidebar', sidebarColor);
+  }
+
+  // Update active state in menu
+  document.querySelectorAll('.theme-opt-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === themeId);
+  });
+
+  // Update preview swatch in header button
+  const swatch = document.getElementById('current-theme-swatch');
+  if (swatch) {
+    swatch.style.background = bgColor;
+  }
+
+  // Update custom color input value
+  const customInput = document.getElementById('custom-bg-input');
+  if (customInput && bgColor.startsWith('#')) {
+    customInput.value = bgColor;
+  }
+
+  // Persist
+  localStorage.setItem('carenexus_theme', themeId);
+  localStorage.removeItem('carenexus_custom_bg');
+
+  // Close menu
+  const menu = document.getElementById('theme-dropdown-menu');
+  if (menu) menu.classList.remove('open');
+
+  if (showNotice) {
+    showToast(`Dashboard theme set to ${label}`);
+  }
+}
+
+function applyCustomColor(hexColor, showNotice = true) {
+  if (!hexColor) return;
+
+  document.documentElement.style.setProperty('--bg-app', hexColor);
+
+  // Compute slightly lighter tone for sidebar
+  document.documentElement.style.setProperty('--bg-sidebar', hexColor);
+
+  // Deselect preset buttons
+  document.querySelectorAll('.theme-opt-btn').forEach(btn => btn.classList.remove('active'));
+
+  // Update preview swatch
+  const swatch = document.getElementById('current-theme-swatch');
+  if (swatch) {
+    swatch.style.background = hexColor;
+  }
+
+  localStorage.setItem('carenexus_custom_bg', hexColor);
+  localStorage.removeItem('carenexus_theme');
+
+  if (showNotice) {
+    showToast(`Custom background color applied: ${hexColor}`);
+  }
 }
 
 // Global Exports
@@ -722,3 +818,8 @@ window.handleCreateCareLog = handleCreateCareLog;
 window.handleScheduleCoaching = handleScheduleCoaching;
 window.handleCreateReferral = handleCreateReferral;
 window.syncCaregiverRecipient = syncCaregiverRecipient;
+window.toggleThemeDropdown = toggleThemeDropdown;
+window.selectTheme = selectTheme;
+window.applyCustomColor = applyCustomColor;
+window.initTheme = initTheme;
+
