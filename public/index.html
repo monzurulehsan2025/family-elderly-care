@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareNexus Partner Platform | Caregiver Support & Clinical Care Coordination</title>
+  <meta name="description" content="Enterprise platform for managing family caregivers, tracking care recipient ADLs and vitals, coordinating clinical telehealth coaching, and processing healthcare partner referrals.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-container">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          <path d="M12 5v14"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">CareNexus</div>
+        <div class="brand-subtitle">Partner Platform</div>
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <div class="nav-section-label">Care Operations</div>
+      
+      <a class="nav-item active" data-view="dashboard" id="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/>
+          <rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <a class="nav-item" data-view="caregivers" id="nav-caregivers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Caregivers</span>
+        <span class="nav-badge" id="badge-caregivers-count">6</span>
+      </a>
+
+      <a class="nav-item" data-view="recipients" id="nav-recipients">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+        <span>Care Recipients & ADLs</span>
+        <span class="nav-badge teal" id="badge-recipients-count">6</span>
+      </a>
+
+      <a class="nav-item" data-view="logs" id="nav-logs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span>Daily Care Logs</span>
+        <span class="nav-badge urgent" id="badge-logs-flagged">1 Action</span>
+      </a>
+
+      <div class="nav-section-label">Clinical & Intake</div>
+
+      <a class="nav-item" data-view="coaching" id="nav-coaching">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 10l5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/>
+          <circle cx="9" cy="9" r="2"/>
+        </svg>
+        <span>Clinical Coaching</span>
+      </a>
+
+      <a class="nav-item" data-view="referrals" id="nav-referrals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M12 11h4"/><path d="M12 16h4"/>
+          <path d="M8 11h.01"/><path d="M8 16h.01"/>
+        </svg>
+        <span>Partner Referrals</span>
+        <span class="nav-badge" id="badge-referrals-count">4</span>
+      </a>
+
+      <div class="nav-section-label">Developer & Integration</div>
+
+      <a class="nav-item" data-view="explorer" id="nav-explorer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+        </svg>
+        <span>REST API Explorer</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="partner-org-card">
+        <div class="org-avatar">HN</div>
+        <div class="org-info">
+          <div class="org-name">Horizon Health ACO</div>
+          <div class="org-tier">Enterprise Health Partner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <h1 class="page-title" id="current-view-title">Care Operations Dashboard</h1>
+        <div class="system-status-indicator">
+          <span class="status-dot"></span>
+          <span>REST SOA Gateway Active</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="api-mode-chip">
+          <span>API Base:</span>
+          <code>/api/v1</code>
+        </div>
+        <button class="btn btn-primary" id="btn-quick-log" onclick="openModal('modal-create-log')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Record Daily Log</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Content Body -->
+    <main class="content-body">
+
+      <!-- ================= 1. DASHBOARD VIEW ================= -->
+      <section class="view-section active" id="view-dashboard">
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Active Caregivers</span>
+              <div class="kpi-icon-wrap primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                </svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-caregivers-val">6</div>
+            <div class="kpi-footer">
+              <span class="trend-badge">↑ 100%</span>
+              <span>Enrolled in state SFC / LTSS</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Care Recipients</span>
+              <div class="kpi-icon-wrap teal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-recipients-val">6</div>
+            <div class="kpi-footer">
+              <span class="trend-badge">100%</span>
+              <span>Active ADL Care Plans</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Avg Caregiver Wellness</span>
+              <div class="kpi-icon-wrap amber">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-wellness-val">79 / 100</div>
+            <div class="kpi-footer">
+              <span class="trend-badge">Stable</span>
+              <span>1 Caregiver High Strain</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Pending Referrals</span>
+              <div class="kpi-icon-wrap rose">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpi-referrals-val">3</div>
+            <div class="kpi-footer">
+              <span class="trend-badge negative">1 Urgent</span>
+              <span>Hospital discharge triage</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Quick Actions & Health Alert Banner -->
+        <div class="glass-panel" style="margin-bottom: 24px; border-left: 4px solid var(--rose);">
+          <div class="panel-header" style="background: rgba(244, 63, 94, 0.08);">
+            <div class="panel-title" style="color: #fb7185;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <span>Clinical Attention Flagged: Margaret Henderson (Caregiver: James Henderson)</span>
+            </div>
+            <button class="btn btn-secondary" style="font-size: 0.78rem; padding: 4px 10px;" onclick="switchView('coaching')">
+              View Respite Intervention
+            </button>
+          </div>
+          <div style="padding: 16px 20px; font-size: 0.86rem; color: var(--text-secondary);">
+            Caregiver reported severe sundowning agitation and sleep disruption (Burnout Index: 8/10). Telehealth consultation scheduled with Clinical Coach Marcus Vance, LCSW for VA respite support authorization.
+          </div>
+        </div>
+
+        <!-- Two Column Overview Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <!-- Recent Daily Care Logs -->
+          <div class="glass-panel" style="margin-bottom: 0;">
+            <div class="panel-header">
+              <div class="panel-title">Recent Care Observations</div>
+              <button class="btn btn-outline-primary" style="font-size: 0.75rem; padding: 4px 10px;" onclick="switchView('logs')">
+                View All
+              </button>
+            </div>
+            <div style="padding: 16px;" id="dashboard-recent-logs">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Active Healthcare Partner Referrals -->
+          <div class="glass-panel" style="margin-bottom: 0;">
+            <div class="panel-header">
+              <div class="panel-title">Partner Intake Pipeline</div>
+              <button class="btn btn-outline-primary" style="font-size: 0.75rem; padding: 4px 10px;" onclick="switchView('referrals')">
+                View All
+              </button>
+            </div>
+            <div style="padding: 16px;" id="dashboard-recent-referrals">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 2. CAREGIVERS VIEW ================= -->
+      <section class="view-section" id="view-caregivers">
+        <div class="section-toolbar">
+          <div class="section-info">
+            <h2>Caregiver Caseload & Profiles</h2>
+            <p>Family caregivers enrolled across Structured Family Caregiving, VA, and Medicaid LTSS</p>
+          </div>
+          <div class="toolbar-actions">
+            <div class="search-input-group">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="caregiver-search" class="search-input" placeholder="Search caregiver, recipient, program...">
+            </div>
+            <select id="caregiver-status-filter" class="filter-select">
+              <option value="">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="High Support">High Support</option>
+              <option value="Onboarding">Onboarding</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="glass-panel">
+          <table class="custom-table" id="caregivers-table">
+            <thead>
+              <tr>
+                <th>Caregiver</th>
+                <th>Care Recipient</th>
+                <th>Program / State</th>
+                <th>Assigned Coach</th>
+                <th>Wellness Index</th>
+                <th>Monthly Stipend</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="caregivers-tbody">
+              <!-- Dynamically populated from GET /api/v1/caregivers -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+      <!-- ================= 3. CARE RECIPIENTS & ADLs VIEW ================= -->
+      <section class="view-section" id="view-recipients">
+        <div class="section-toolbar">
+          <div class="section-info">
+            <h2>Care Recipients & ADL Functional Scorecards</h2>
+            <p>Monitored loved ones, Activities of Daily Living (ADLs), acuity tiers, and latest vitals</p>
+          </div>
+          <div class="toolbar-actions">
+            <div class="search-input-group">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="recipient-search" class="search-input" placeholder="Search care recipient or condition...">
+            </div>
+            <select id="recipient-acuity-filter" class="filter-select">
+              <option value="">All Acuity Tiers</option>
+              <option value="Tier 3">Tier 3 - High Acuity</option>
+              <option value="Tier 2">Tier 2 - Moderate Acuity</option>
+              <option value="Tier 1">Tier 1 - Low Acuity</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cards-grid" id="recipients-grid">
+          <!-- Dynamically populated from GET /api/v1/care-recipients -->
+        </div>
+      </section>
+
+
+      <!-- ================= 4. DAILY CARE LOGS VIEW ================= -->
+      <section class="view-section" id="view-logs">
+        <div class="section-toolbar">
+          <div class="section-info">
+            <h2>Caregiver Daily Observation Logs</h2>
+            <p>Real-time shift logs, medication adherence, vitals, behavioral notes, and clinical triage flags</p>
+          </div>
+          <div class="toolbar-actions">
+            <select id="log-filter-flagged" class="filter-select">
+              <option value="all">All Submissions</option>
+              <option value="flagged">Flagged for Coach Action</option>
+            </select>
+            <button class="btn btn-primary" onclick="openModal('modal-create-log')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Submit New Daily Log</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="timeline-feed" id="logs-timeline">
+          <!-- Dynamically populated from GET /api/v1/care-logs -->
+        </div>
+      </section>
+
+
+      <!-- ================= 5. CLINICAL COACHING VIEW ================= -->
+      <section class="view-section" id="view-coaching">
+        <div class="section-toolbar">
+          <div class="section-info">
+            <h2>Clinical Coaching & Telehealth Sessions</h2>
+            <p>1-on-1 consultations with Registered Nurses & Social Workers, caregiver burnout tracking, and action plans</p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-schedule-coaching')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Schedule Coaching Session</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cards-grid" id="coaching-grid">
+          <!-- Dynamically populated from GET /api/v1/coaching/sessions -->
+        </div>
+      </section>
+
+
+      <!-- ================= 6. PARTNER REFERRALS VIEW ================= -->
+      <section class="view-section" id="view-referrals">
+        <div class="section-toolbar">
+          <div class="section-info">
+            <h2>Healthcare Partner Referral Intake</h2>
+            <p>Discharge planning referrals from health systems, ACOs, and Medicare/Medicaid plans</p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-create-referral')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Submit Partner Referral</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-panel">
+          <table class="custom-table" id="referrals-table">
+            <thead>
+              <tr>
+                <th>Referral ID & Date</th>
+                <th>Referring Partner</th>
+                <th>Patient & Age</th>
+                <th>Prospective Caregiver</th>
+                <th>Program & Payer</th>
+                <th>Priority</th>
+                <th>Triage Status</th>
+              </tr>
+            </thead>
+            <tbody id="referrals-tbody">
+              <!-- Dynamically populated from GET /api/v1/partner/referrals -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+      <!-- ================= 7. REST API EXPLORER VIEW ================= -->
+      <section class="view-section" id="view-explorer">
+        <div class="section-toolbar">
+          <div class="section-info">
+            <h2>Interactive REST API Explorer</h2>
+            <p>Live endpoint tester for CareNexus REST SOA services. Execute real HTTP requests, inspect headers, and view JSON responses.</p>
+          </div>
+        </div>
+
+        <div class="api-explorer-container">
+          <!-- Endpoint Selector Sidebar -->
+          <div class="endpoint-nav-list">
+            <button class="endpoint-btn active" data-endpoint-id="ep-caregivers-get">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="method-tag method-get">GET</span>
+                <span class="endpoint-path">/api/v1/caregivers</span>
+              </div>
+              <span class="endpoint-desc">List all family caregivers with caseload metadata</span>
+            </button>
+
+            <button class="endpoint-btn" data-endpoint-id="ep-recipients-get">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="method-tag method-get">GET</span>
+                <span class="endpoint-path">/api/v1/care-recipients</span>
+              </div>
+              <span class="endpoint-desc">List care recipients with functional ADL scorecards</span>
+            </button>
+
+            <button class="endpoint-btn" data-endpoint-id="ep-carelogs-post">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="method-tag method-post">POST</span>
+                <span class="endpoint-path">/api/v1/care-logs</span>
+              </div>
+              <span class="endpoint-desc">Submit caregiver daily observation & vitals log</span>
+            </button>
+
+            <button class="endpoint-btn" data-endpoint-id="ep-coaching-post">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="method-tag method-post">POST</span>
+                <span class="endpoint-path">/api/v1/coaching/sessions</span>
+              </div>
+              <span class="endpoint-desc">Schedule clinical coaching telehealth session</span>
+            </button>
+
+            <button class="endpoint-btn" data-endpoint-id="ep-referrals-post">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="method-tag method-post">POST</span>
+                <span class="endpoint-path">/api/v1/partner/referrals</span>
+              </div>
+              <span class="endpoint-desc">Submit healthcare partner intake & triage referral</span>
+            </button>
+          </div>
+
+          <!-- Console & Live JSON Inspector Panel -->
+          <div class="console-editor-panel">
+            <div class="console-topbar">
+              <div class="url-bar-display">
+                <span class="method-tag method-get" id="explorer-method-tag">GET</span>
+                <span id="explorer-url-path">/api/v1/caregivers</span>
+              </div>
+              <button class="btn btn-primary" id="btn-execute-api" onclick="executeCurrentEndpoint()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Send Request</span>
+              </button>
+            </div>
+
+            <div class="json-pane-split">
+              <!-- Left: Request Payload -->
+              <div class="json-pane">
+                <div class="pane-title">
+                  <span>JSON Request Body</span>
+                  <span style="font-weight: normal; text-transform: none; color: var(--text-muted);">(Editable)</span>
+                </div>
+                <textarea id="explorer-request-body" class="json-textarea" spellcheck="false"></textarea>
+              </div>
+
+              <!-- Right: Live Response Output -->
+              <div class="json-pane">
+                <div class="pane-title">
+                  <span>HTTP Response</span>
+                  <span id="explorer-status-badge" style="font-family: 'JetBrains Mono', monospace; color: #34d399;">Ready</span>
+                </div>
+                <pre id="explorer-response-body" class="json-output-viewer">Click "Send Request" to execute endpoint...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Modal: Create Daily Care Log (POST /api/v1/care-logs) -->
+  <div class="modal-overlay" id="modal-create-log">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">Record Daily Care Observation Log</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-create-log')">✕</button>
+      </div>
+      <form id="form-create-log" onsubmit="handleCreateCareLog(event)">
+        <div class="modal-body">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Caregiver</label>
+              <select class="form-select" id="log-caregiver-select" required onchange="syncCaregiverRecipient()">
+                <option value="cg-101" data-recipient="cr-201">Maria Rodriguez (Rosa Rodriguez)</option>
+                <option value="cg-102" data-recipient="cr-202">James Henderson (Margaret Henderson)</option>
+                <option value="cg-103" data-recipient="cr-203">Amina Al-Mansoor (Tariq Al-Mansoor)</option>
+                <option value="cg-104" data-recipient="cr-204">Marcus Chen (Wei-Ling Chen)</option>
+                <option value="cg-105" data-recipient="cr-205">Deborah Kowalski (Stanley Kowalski)</option>
+                <option value="cg-106" data-recipient="cr-206">Latoya Washington (Bernice Washington)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Shift Type</label>
+              <select class="form-select" id="log-shift-type">
+                <option value="Morning">Morning Shift</option>
+                <option value="Afternoon">Afternoon Shift</option>
+                <option value="Night">Night Shift</option>
+                <option value="Full Day">Full Day</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Care Recipient Mood</label>
+              <select class="form-select" id="log-mood">
+                <option value="Calm & Cooperative">Calm & Cooperative</option>
+                <option value="Alert & Cheerful">Alert & Cheerful</option>
+                <option value="Agitated / Mild Confusion">Agitated / Mild Confusion</option>
+                <option value="Fatigued / Low Energy">Fatigued / Low Energy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hours of Sleep</label>
+              <input type="number" step="0.5" class="form-input" id="log-sleep-hours" value="7.5" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Blood Pressure (mmHg)</label>
+              <input type="text" class="form-input" id="log-bp" value="126/80" placeholder="e.g. 120/80">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Blood Glucose (mg/dL)</label>
+              <input type="number" class="form-input" id="log-glucose" value="108" placeholder="e.g. 105">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ADLs Completed</label>
+            <input type="text" class="form-input" id="log-adls" value="Morning Medications, Assisted Shower, Breakfast Meal Prep, Walking Exercise" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Behavioral & Clinical Observations</label>
+            <textarea class="form-textarea" id="log-notes" placeholder="Describe the care routine, emotional response, appetite, or any changes..."></textarea>
+          </div>
+
+          <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px;">
+            <input type="checkbox" id="log-flag-coach" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="log-flag-coach" class="form-label" style="cursor: pointer; margin-bottom: 0;">
+              Flag for Clinical Coach Priority Review (Urgent symptoms / caregiver strain)
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-create-log')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit to REST API</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- 2. Modal: Schedule Clinical Coaching (POST /api/v1/coaching/sessions) -->
+  <div class="modal-overlay" id="modal-schedule-coaching">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">Schedule Clinical Coaching Consultation</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-schedule-coaching')">✕</button>
+      </div>
+      <form id="form-create-coaching" onsubmit="handleScheduleCoaching(event)">
+        <div class="modal-body">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Caregiver</label>
+              <select class="form-select" id="coach-caregiver-select" required>
+                <option value="cg-101">Maria Rodriguez</option>
+                <option value="cg-102">James Henderson</option>
+                <option value="cg-103">Amina Al-Mansoor</option>
+                <option value="cg-104">Marcus Chen</option>
+                <option value="cg-105">Deborah Kowalski</option>
+                <option value="cg-106">Latoya Washington</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Clinical Coach</label>
+              <select class="form-select" id="coach-name-select">
+                <option value="Sarah Jenkins, RN">Sarah Jenkins, RN (Lead Nurse)</option>
+                <option value="Marcus Vance, LCSW">Marcus Vance, LCSW (Mental Health/Respite)</option>
+                <option value="Elena Rostova, BSN">Elena Rostova, BSN (Chronic Care)</option>
+                <option value="David Kim, MSW">David Kim, MSW (Social Services)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Session Type</label>
+              <select class="form-select" id="coach-session-type">
+                <option value="Bi-Weekly Clinical & Wellness Review">Bi-Weekly Clinical & Wellness Review</option>
+                <option value="Caregiver Burnout & Respite Planning">Caregiver Burnout & Respite Planning</option>
+                <option value="Medication Management & Safety Review">Medication Management & Safety Review</option>
+                <option value="Fall Prevention & Mobility Ergonomics">Fall Prevention & Mobility Ergonomics</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Scheduled Date & Time</label>
+              <input type="datetime-local" class="form-input" id="coach-datetime" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Duration (Minutes)</label>
+              <input type="number" class="form-input" id="coach-duration" value="45">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Caregiver Burnout Assessment (1-10)</label>
+              <input type="number" min="1" max="10" class="form-input" id="coach-burnout-val" value="4">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Clinical Agenda & Goals</label>
+            <textarea class="form-textarea" id="coach-summary" placeholder="Focus areas for consultation, medication review, respite needs..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-schedule-coaching')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Schedule Session</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- 3. Modal: Create Partner Referral (POST /api/v1/partner/referrals) -->
+  <div class="modal-overlay" id="modal-create-referral">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">Healthcare Partner Referral Intake</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-create-referral')">✕</button>
+      </div>
+      <form id="form-create-referral" onsubmit="handleCreateReferral(event)">
+        <div class="modal-body">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Referring Health System / Partner</label>
+              <select class="form-select" id="ref-partner-select">
+                <option value="MetroHealth Integrated Care Network">MetroHealth Integrated Care Network</option>
+                <option value="Horizon Senior Health Plan (Medicare Advantage)">Horizon Senior Health Plan</option>
+                <option value="Valley Hospital Health System - Discharge">Valley Hospital Health System</option>
+                <option value="Beacon Health Alliance ACO">Beacon Health Alliance ACO</option>
+                <option value="Pinnacle Geriatric Care Group">Pinnacle Geriatric Care Group</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Priority Level</label>
+              <select class="form-select" id="ref-priority-select">
+                <option value="Standard">Standard Priority</option>
+                <option value="High">High Priority</option>
+                <option value="Urgent">Urgent (Discharge in &lt;48h)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Patient Full Name</label>
+              <input type="text" class="form-input" id="ref-patient-name" placeholder="e.g. Eleanor Vance" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Patient Age</label>
+              <input type="number" class="form-input" id="ref-patient-age" value="80" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Prospective Family Caregiver</label>
+              <input type="text" class="form-input" id="ref-caregiver-name" placeholder="e.g. Robert Vance" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Relationship</label>
+              <input type="text" class="form-input" id="ref-caregiver-rel" value="Son (Co-residing)" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Insurance Payer</label>
+              <input type="text" class="form-input" id="ref-payer" value="State Medicaid LTSS Waiver">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Program Requested</label>
+              <input type="text" class="form-input" id="ref-program" value="Structured Family Caregiving (SFC)">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Clinical Discharge & Triage Summary</label>
+            <textarea class="form-textarea" id="ref-summary" placeholder="Clinical conditions, ADL support needed, hospitalization notes..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-create-referral')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Referral to API</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application Logic Scripts -->
+  <script src="/js/apiExplorer.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
