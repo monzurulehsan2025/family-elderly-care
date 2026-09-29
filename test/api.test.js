@@ -100,7 +100,22 @@ async function runTests() {
     }
   });
 
-  // 5. Endpoint 3: POST & GET /api/v1/care-logs
+  // 5. Endpoint 2 Detail: GET /api/v1/care-recipients/cr-201
+  await assert('GET /api/v1/care-recipients/:id returns single care recipient with functional ADL scorecard', async () => {
+    const res = await makeRequest('GET', '/api/v1/care-recipients/cr-201');
+    if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
+    if (!res.data.success || !res.data.data) throw new Error('Expected success: true with recipient payload');
+    if (res.data.data.id !== 'cr-201') throw new Error(`Expected id 'cr-201', got '${res.data.data.id}'`);
+    if (res.data.data.fullName !== 'Rosa Rodriguez') throw new Error('Expected recipient fullName Rosa Rodriguez');
+    if (!res.data.data.adlScores || typeof res.data.data.adlScores !== 'object') {
+      throw new Error('Expected functional adlScores object in detail response');
+    }
+    if (!res.data.data.acuityTier || !res.data.data.vitalsLatest) {
+      throw new Error('Expected acuityTier and vitalsLatest in detail response');
+    }
+  });
+
+  // 6. Endpoint 3: POST /api/v1/care-logs
   await assert('POST /api/v1/care-logs creates new observation log (201 Created)', async () => {
     const payload = {
       caregiverId: "cg-101",
@@ -125,7 +140,7 @@ async function runTests() {
     if (!res.data.data.id.startsWith('log-')) throw new Error('Expected generated log id');
   });
 
-  // 6. Endpoint 4: POST /api/v1/coaching/sessions
+  // 7. Endpoint 4: POST /api/v1/coaching/sessions
   await assert('POST /api/v1/coaching/sessions schedules clinical telehealth consultation (201 Created)', async () => {
     const payload = {
       caregiverId: "cg-103",
@@ -143,7 +158,7 @@ async function runTests() {
     if (!res.data.data.id.startsWith('cs-')) throw new Error('Expected generated session id');
   });
 
-  // 7. Endpoint 5: POST /api/v1/partner/referrals
+  // 8. Endpoint 5: POST /api/v1/partner/referrals
   await assert('POST /api/v1/partner/referrals ingests partner referral & generates intake record (201 Created)', async () => {
     const payload = {
       referringPartner: "MetroHealth Integrated Care Network",
@@ -165,7 +180,7 @@ async function runTests() {
     if (!res.data.data.id.startsWith('ref-')) throw new Error('Expected generated referral id');
   });
 
-  // 8. Stats Overview: GET /api/v1/stats/overview
+  // 9. Stats Overview: GET /api/v1/stats/overview
   await assert('GET /api/v1/stats/overview returns aggregate partner dashboard KPIs (200 OK)', async () => {
     const res = await makeRequest('GET', '/api/v1/stats/overview');
     if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
@@ -178,7 +193,7 @@ async function runTests() {
     if (typeof totalCareLogs !== 'number' || totalCareLogs <= 0) throw new Error('Invalid totalCareLogs in stats');
   });
 
-  // 9. Error Handling & Validation: POST /api/v1/care-logs with missing required fields
+  // 10. Error Handling & Validation: POST /api/v1/care-logs with missing required fields
   await assert('POST /api/v1/care-logs rejects malformed payload with 400 Bad Request', async () => {
     const invalidPayload = {
       // Intentionally missing caregiverId, careRecipientId, and adlsCompleted
@@ -194,7 +209,7 @@ async function runTests() {
     }
   });
 
-  // 10. Query Filtering: GET /api/v1/caregivers with status and search query params
+  // 11. Query Filtering: GET /api/v1/caregivers with status and search query params
   await assert('GET /api/v1/caregivers?status=Active&search=Rodriguez returns filtered matches', async () => {
     const res = await makeRequest('GET', '/api/v1/caregivers?status=Active&search=Rodriguez');
     if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
@@ -206,7 +221,7 @@ async function runTests() {
     }
   });
 
-  // 11. Resource Not Found: GET /api/v1/caregivers/non-existent-id returns 404
+  // 12. Resource Not Found: GET /api/v1/caregivers/non-existent-id returns 404
   await assert('GET /api/v1/caregivers/:invalidId returns 404 Not Found', async () => {
     const res = await makeRequest('GET', '/api/v1/caregivers/cg-99999');
     if (res.status !== 404) throw new Error(`Expected status 404, got ${res.status}`);
