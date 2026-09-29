@@ -115,7 +115,7 @@ async function runTests() {
     }
   });
 
-  // 6. Endpoint 3: POST /api/v1/care-logs
+  // 6. Endpoint 3 POST: POST /api/v1/care-logs
   await assert('POST /api/v1/care-logs creates new observation log (201 Created)', async () => {
     const payload = {
       caregiverId: "cg-101",
@@ -140,7 +140,19 @@ async function runTests() {
     if (!res.data.data.id.startsWith('log-')) throw new Error('Expected generated log id');
   });
 
-  // 7. Endpoint 4: POST /api/v1/coaching/sessions
+  // 7. Endpoint 3 GET: GET /api/v1/care-logs
+  await assert('GET /api/v1/care-logs returns chronological care observation logs with optional filtering', async () => {
+    const res = await makeRequest('GET', '/api/v1/care-logs?caregiverId=cg-101');
+    if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
+    if (!res.data.success || !Array.isArray(res.data.data)) throw new Error('Expected array of care logs');
+    if (res.data.data.length === 0) throw new Error('Expected at least 1 care log for cg-101');
+    const log = res.data.data[0];
+    if (!log.id || !log.caregiverId || !Array.isArray(log.adlsCompleted) || !log.vitals) {
+      throw new Error('Care log schema validation failed');
+    }
+  });
+
+  // 8. Endpoint 4 POST: POST /api/v1/coaching/sessions
   await assert('POST /api/v1/coaching/sessions schedules clinical telehealth consultation (201 Created)', async () => {
     const payload = {
       caregiverId: "cg-103",
@@ -158,7 +170,19 @@ async function runTests() {
     if (!res.data.data.id.startsWith('cs-')) throw new Error('Expected generated session id');
   });
 
-  // 8. Endpoint 5: POST /api/v1/partner/referrals
+  // 9. Endpoint 4 GET: GET /api/v1/coaching/sessions
+  await assert('GET /api/v1/coaching/sessions returns scheduled clinical telehealth sessions', async () => {
+    const res = await makeRequest('GET', '/api/v1/coaching/sessions?status=Scheduled');
+    if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
+    if (!res.data.success || !Array.isArray(res.data.data)) throw new Error('Expected array of coaching sessions');
+    if (res.data.data.length === 0) throw new Error('Expected at least 1 scheduled coaching session');
+    const session = res.data.data[0];
+    if (!session.id || !session.coachName || !session.sessionType || typeof session.caregiverBurnoutScore !== 'number') {
+      throw new Error('Coaching session schema validation failed');
+    }
+  });
+
+  // 10. Endpoint 5: POST /api/v1/partner/referrals
   await assert('POST /api/v1/partner/referrals ingests partner referral & generates intake record (201 Created)', async () => {
     const payload = {
       referringPartner: "MetroHealth Integrated Care Network",
@@ -180,7 +204,7 @@ async function runTests() {
     if (!res.data.data.id.startsWith('ref-')) throw new Error('Expected generated referral id');
   });
 
-  // 9. Stats Overview: GET /api/v1/stats/overview
+  // 11. Stats Overview: GET /api/v1/stats/overview
   await assert('GET /api/v1/stats/overview returns aggregate partner dashboard KPIs (200 OK)', async () => {
     const res = await makeRequest('GET', '/api/v1/stats/overview');
     if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
@@ -193,7 +217,7 @@ async function runTests() {
     if (typeof totalCareLogs !== 'number' || totalCareLogs <= 0) throw new Error('Invalid totalCareLogs in stats');
   });
 
-  // 10. Error Handling & Validation: POST /api/v1/care-logs with missing required fields
+  // 12. Error Handling & Validation: POST /api/v1/care-logs with missing required fields
   await assert('POST /api/v1/care-logs rejects malformed payload with 400 Bad Request', async () => {
     const invalidPayload = {
       // Intentionally missing caregiverId, careRecipientId, and adlsCompleted
@@ -209,7 +233,7 @@ async function runTests() {
     }
   });
 
-  // 11. Query Filtering: GET /api/v1/caregivers with status and search query params
+  // 13. Query Filtering: GET /api/v1/caregivers with status and search query params
   await assert('GET /api/v1/caregivers?status=Active&search=Rodriguez returns filtered matches', async () => {
     const res = await makeRequest('GET', '/api/v1/caregivers?status=Active&search=Rodriguez');
     if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
@@ -221,7 +245,7 @@ async function runTests() {
     }
   });
 
-  // 12. Resource Not Found: GET /api/v1/caregivers/non-existent-id returns 404
+  // 14. Resource Not Found: GET /api/v1/caregivers/non-existent-id returns 404
   await assert('GET /api/v1/caregivers/:invalidId returns 404 Not Found', async () => {
     const res = await makeRequest('GET', '/api/v1/caregivers/cg-99999');
     if (res.status !== 404) throw new Error(`Expected status 404, got ${res.status}`);
