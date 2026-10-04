@@ -255,6 +255,19 @@ async function runTests() {
     }
   });
 
+  // 15. Endpoint 5 GET: GET /api/v1/partner/referrals filtered by priority
+  await assert('GET /api/v1/partner/referrals?priority=High returns high-priority intake records', async () => {
+    const res = await makeRequest('GET', '/api/v1/partner/referrals?priority=High');
+    if (res.status !== 200) throw new Error(`Expected status 200, got ${res.status}`);
+    if (!res.data.success || !Array.isArray(res.data.data)) throw new Error('Expected array of partner referrals');
+    if (res.data.data.length === 0) throw new Error('Expected at least 1 high-priority referral');
+    const referral = res.data.data[0];
+    if (referral.priorityLevel !== 'High') throw new Error(`Expected priorityLevel 'High', got '${referral.priorityLevel}'`);
+    if (!referral.id || !referral.referringPartner || !referral.patientName || !referral.prospectiveCaregiverName || !referral.authorizationStatus) {
+      throw new Error('Partner referral schema validation failed');
+    }
+  });
+
   console.log('\n========================================');
   console.log(` Summary: ${passed} passed, ${failed} failed`);
   console.log('========================================\n');
